@@ -3,5 +3,6 @@
 
 *.pyc
 
+test.py
 tests.py
 assets/tmx/tests.tmx
