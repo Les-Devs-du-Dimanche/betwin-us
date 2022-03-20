@@ -4,3 +4,4 @@
 *.pyc
 
 tests.py
+assets/tmx/tests.tmx

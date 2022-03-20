@@ -6,13 +6,13 @@ from .consts import DISPLAY_SIZE, FPS
 from .display.assets import Assets
 from .entity.player import Player
 from .group import Groups
-from .keybinds import Keybinds
 from .gui.components import Button, KeyButton, Slider
 from .gui.menu import Menu
+from .keybinds import Keybinds
+from .settings import Settings
+from .sound import Sound
 from .time import Time
 from .translate import Translate
-from .sound import Sound
-from .settings import Settings
 
 
 class Game:
