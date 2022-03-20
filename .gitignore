@@ -2,3 +2,6 @@
 .venv/
 
 *.pyc
+
+test.py
+src/generator/research.ipynb
