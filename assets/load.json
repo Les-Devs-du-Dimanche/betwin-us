@@ -1,1 +1,3 @@
-{}
+{
+    "entity.player": "textures/entities/player.json"
+}

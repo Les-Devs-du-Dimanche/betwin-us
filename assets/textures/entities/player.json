@@ -1,0 +1,20 @@
+{
+    "speed": 0.15,
+    "animations": {
+        "south_idle": [0, 1],
+        "south_walking": [0, 4],
+        "south_attacking": [1, 4],
+
+        "west_idle": [2, 1],
+        "west_walking": [2, 4],
+        "west_attacking": [3, 4],
+
+        "east_idle": [4, 1],
+        "east_walking": [4, 4],
+        "east_attacking": [5, 4],
+
+        "north_idle": [6, 1],
+        "north_walking": [6, 4],
+        "north_attacking": [7, 4]
+    }
+}
