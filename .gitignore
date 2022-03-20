@@ -3,5 +3,4 @@
 
 *.pyc
 
-test.py
-src/generator/research.ipynb
+tests.py

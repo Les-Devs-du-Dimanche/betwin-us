@@ -1,1 +1,6 @@
-{}
+{
+    "player.move.north": 122,
+    "player.move.east": 100,
+    "player.move.south": 115,
+    "player.move.west": 113
+}

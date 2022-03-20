@@ -1,1 +1,8 @@
-{}
+{
+    "entity.player": "textures/entities/player.json",
+
+    "font.menu": "fonts/menu.ttf",
+
+    "sounds.click": "sounds/click.ogg",
+    "sounds.back": "sounds/back.ogg"
+}

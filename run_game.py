@@ -1,3 +1,4 @@
+# check python version
 import sys
 
 MIN_VER = (3, 10)
@@ -7,6 +8,11 @@ if sys.version_info[:2] < MIN_VER:
         'This game requires Python {}.{}'.format(*MIN_VER)
     )
 
+# hide pygame init message
+import os
+os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
+
+# start game
 from src.game import Game
 
 game = Game()
