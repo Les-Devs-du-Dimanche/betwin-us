@@ -13,7 +13,7 @@ class Entity(Sprite):
     
     animation_name: str
     
-    HITBOX = 0, 0
+    HITBOX: tuple[int, int]
     
     class Speed:
         WALK = 3

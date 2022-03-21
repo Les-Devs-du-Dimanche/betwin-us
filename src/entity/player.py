@@ -10,6 +10,8 @@ class Player(Entity):
     
     animation_name = 'entity.player'
     
+    HITBOX = -20, -30
+    
     def __init__(self, pos: Vector2):
         super().__init__(pos)
         
@@ -40,7 +42,8 @@ class Player(Entity):
         else:
             self.direction.x = 0
             
-        # set vector lenght to 1
+        # set vector lenght to 1 -> prevent speed augmentation during diagonal moves
         if self.direction.magnitude() != 0:
-            self.direction.normalize()
+            self.direction = self.direction.normalize()
+
     
