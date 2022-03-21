@@ -60,7 +60,6 @@ class Game:
                     Button.click_event = True
                     
                 elif event.type == pygame.MOUSEBUTTONDOWN:
-                    KeyButton.reset()
                     Slider.click_event = True
                     
                 elif event.type == pygame.QUIT:

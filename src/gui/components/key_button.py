@@ -16,12 +16,9 @@ class KeyButton(Button):
     
     key_event = 0
     
-    _keybuttons: list['KeyButton'] = []
-    
     def __init__(self, rect: tuple[int, int, int, int], key_code: str):
         self.key_code = key_code
         super().__init__(rect, self.get_text(), self.on_click)
-        KeyButton._keybuttons.append(self)
         
         self.listening = False
 
@@ -30,6 +27,9 @@ class KeyButton(Button):
         
     def update(self):
         super().update()
+        
+        if self.click_event and not self.hovered:
+            self.listening = False
         
         if self.listening and self.key_event:
             if self.key_event not in self.FORBIDDEN_KEYS:
@@ -44,8 +44,3 @@ class KeyButton(Button):
             return key_name.upper()
         else:
             return'key.' + key_name.replace(" ", "_")
-    
-    @classmethod
-    def reset(cls):
-        for kb in cls._keybuttons:
-            kb.listening = False    
