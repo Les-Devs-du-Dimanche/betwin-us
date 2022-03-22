@@ -13,6 +13,7 @@ from .settings import Settings
 from .sound import Sound
 from .time import Time
 from .translate import Translate
+from .tmx.level import Level
 
 
 class Game:
@@ -34,15 +35,16 @@ class Game:
         Keybinds.load()
         Groups.init()
         
-        self.player = Player(pygame.Vector2(100, 100))
-        
         self.menu = Menu(self.quit)
+        
+        self.level = Level.load('cinematics/forest.json')
+        self.player = Player(self.level.worldspawn)
     
     def run(self):
         while True:
             
             Button.click_event = False
-            KeyButton.key_event = None
+            KeyButton.key_event = 0
             Slider.click_event = False
             
             for event in pygame.event.get():
@@ -60,7 +62,6 @@ class Game:
                     Button.click_event = True
                     
                 elif event.type == pygame.MOUSEBUTTONDOWN:
-                    KeyButton.reset()
                     Slider.click_event = True
                     
                 elif event.type == pygame.QUIT:
@@ -81,7 +82,7 @@ class Game:
         
     def render(self):
         # NOTE: tmp
-        self.screen.fill((108, 145, 97))
+        # self.screen.fill((108, 145, 97))
         
         Groups.background.draw(self.player)
         Groups.visible.draw(self.player)

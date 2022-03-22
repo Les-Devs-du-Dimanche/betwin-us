@@ -6,6 +6,7 @@ from pygame.mixer import Sound
 
 from ..functions import path
 from .animation import Animation
+from .tileset import Tileset
 
 
 class Assets:
@@ -19,6 +20,7 @@ class Assets:
         
         cls.__assets = {}
         cls.__fonts = {}
+        cls.__tilesets = {}
         
         for key, value in data.items():
             extension = value.split('.')[-1]
@@ -40,12 +42,23 @@ class Assets:
                 cls.__assets[key] = Sound(path('assets/' + value))
                 
     @classmethod
-    def get(cls, key: str, size: int = None) -> Animation | Font | Sound:
+    def get(cls, key: str, size: int = None, id: str = None) -> Animation | Font | Sound | Tileset:
+        # tileset
+        if isinstance(key, list):
+            if id in cls.__tilesets:
+                return cls.__tilesets[id]
+            else:
+                tileset = Tileset(key)
+                cls.__tilesets[id] = tileset
+                return tileset
+            
         asset = cls.__assets.get(key)
         
+        # animation
         if isinstance(asset, Animation):
             return asset.copy()
-            
+        
+        # sound
         elif isinstance(asset, str):
             if key in cls.__fonts:
                 return cls.__fonts[(key, size)]
@@ -53,6 +66,6 @@ class Assets:
                 font = Font(asset, size)
                 cls.__fonts[(key, size)] = font
                 return font
-            
+        # image
         else:
             return asset

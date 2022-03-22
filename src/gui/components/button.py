@@ -38,7 +38,7 @@ class Button(Component):
         if self.rect.collidepoint(get_mouse_pos()):
             self.hovered = True
             
-            if Button.click_event:
+            if self.click_event:
                 if self.text == 'menu.back':
                     Sound.gui('sounds.back')
                 else:
