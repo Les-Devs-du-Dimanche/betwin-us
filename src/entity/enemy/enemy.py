@@ -30,8 +30,8 @@ class Enemy(Entity):
                 self.status = self.Status.WALKING
                 self.chase_enabled = True
         
-        # avoid obstacle
         else:
+            # avoid obstacle
             if PathFinder.obstacle_between(self, player):
                 if self.destination_target is None:
                     target = PathFinder.find(self, player)
