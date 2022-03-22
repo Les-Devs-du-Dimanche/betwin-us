@@ -12,3 +12,8 @@ class Facing(Enum):
     EAST  = 1
     SOUTH = 2
     WEST  = 3
+
+class DoorState(Enum):
+    FORBIDDEN = 0
+    ALLOWED = 1
+    FORCED = 2
