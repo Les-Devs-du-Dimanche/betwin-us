@@ -2,7 +2,7 @@ from typing import Literal, Protocol, TypedDict, Any
 
 from pygame import Rect, Surface, Vector2
 
-from .consts import Facing
+from .consts import Facing, DoorState
 
 if 0: from .entity.entity import Entity
 
@@ -22,6 +22,9 @@ class AnimationTarget(Protocol):
     status: 'Entity.Status'
 
 AnimationFrames = dict[str, list[Surface]]
+
+class DoorStateDict(TypedDict):
+    Facing: DoorState
 
 # Tiled json objects
 class Property(TypedDict):
