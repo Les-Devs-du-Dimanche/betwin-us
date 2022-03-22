@@ -1,7 +1,8 @@
 from numpy import zeros
 
 from room import Room
-from ...consts import Facing
+from ...consts import DoorState, Facing
+from ...functions import reverce_facing
 
 
 class Generator :
@@ -21,6 +22,21 @@ class Generator :
         for door in room.doors() :
             adjacent_rooms = Room.get_adjacent_room(door.destination)
             facing_posibilities = {}
-            for facing, possibility in adjacent_rooms.items() :
-                if f :=      
-    
+            for facing, posibility in adjacent_rooms.items() :
+                if f := reverce_facing[door.facing] == facing :
+                    facing_posibilities[f] = DoorState.FORCED
+                    continue
+                
+                if posibility :
+                    facing_posibilities[facing] = DoorState.ALLOWED
+                else :
+                    facing_posibilities[facing] = DoorState.FORBIDDEN
+                
+                _room = Room(door.destination, facing_posibilities)
+                if _room.nb_door == 1 :
+                    self.impass.append(_room)
+                self.room_grid[door.destination[0]][door.destination[1]] = _room
+                self.gen_room(_room, room_to_generate)
+                
+        def transform_room_grid_to_json(self) :
+            pass
