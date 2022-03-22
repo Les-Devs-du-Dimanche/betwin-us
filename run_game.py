@@ -1,19 +1,25 @@
-# check python version
-import sys
+from multiprocessing import freeze_support
 
-MIN_VER = (3, 10)
 
-if sys.version_info[:2] < MIN_VER:
-    sys.exit(
-        'This game requires Python {}.{}'.format(*MIN_VER)
-    )
+if __name__ == '__main__':
+    freeze_support()
 
-# hide pygame init message
-import os
-os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
+    # check python version
+    import sys
 
-# start game
-from src.game import Game
+    MIN_VER = (3, 10)
 
-game = Game()
-game.run()
+    if sys.version_info[:2] < MIN_VER:
+        sys.exit(
+            'This game requires Python {}.{}'.format(*MIN_VER)
+        )
+
+    # hide pygame init message
+    import os
+    os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
+
+    # start game
+    from src.game import Game
+
+    game = Game()
+    game.run()

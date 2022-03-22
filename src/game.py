@@ -2,6 +2,7 @@ import sys
 
 import pygame
 
+from .entity.pathfinder import PathFinder
 from .consts import DISPLAY_SIZE, FPS
 from .display.assets import Assets
 from .entity.player import Player
@@ -14,6 +15,8 @@ from .sound import Sound
 from .time import Time
 from .translate import Translate
 from .tmx.level import Level
+
+from .tmx.tile import Tile
 
 
 class Game:
@@ -39,6 +42,17 @@ class Game:
         
         self.level = Level.load('cinematics/forest.json')
         self.player = Player(self.level.worldspawn)
+        
+        PathFinder.start(self.level)
+        
+        # NOTE : DEBUG square at cursor 1/2
+        # s = pygame.Surface((64, 64), pygame.SRCALPHA)
+        # pygame.draw.rect(
+        #     s, (255, 0, 0),
+        #     (0, 0, 64, 64),
+        #     3
+        # )
+        # self.select = Tile([Groups.visible], s)
     
     def run(self):
         while True:
@@ -52,8 +66,8 @@ class Game:
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
                         self.menu.escape()
-                    else:
-                        print(event.key)
+                    # else:
+                    #     print(event.key)
                 
                 elif event.type == pygame.KEYUP:
                     KeyButton.key_event = event.key
@@ -66,7 +80,11 @@ class Game:
                     
                 elif event.type == pygame.QUIT:
                     self.quit()
-                    
+            
+            # NOTE : DEBUG square at cursor 2/2
+            # mouse_pos = pygame.Vector2(pygame.mouse.get_pos()) + Groups.visible.offset
+            # self.select.rect.center = mouse_pos
+            
             self.update()
             self.render()
                         
@@ -77,6 +95,7 @@ class Game:
         
         if not Time.paused:
             Groups.to_update.update(dt)
+            PathFinder.update()
         else:
             self.menu.update()
         

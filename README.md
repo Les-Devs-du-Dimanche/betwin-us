@@ -14,6 +14,8 @@ TODO
 
 ### Dependencies
 - pygame V2.1.2
+- pathfinding V1.0.1
+- numpy V1.22.3
 
 ### Build
 

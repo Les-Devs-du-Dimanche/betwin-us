@@ -12,15 +12,17 @@ class Camera(Group):
         
         self.display_surface = get_screen()
         self.screen_center = Vector2(self.display_surface.get_size()) * 0.5
+        
+        self.offset = Vector2()
             
     def draw(self, center: HasRect):
 
-        offset = Vector2(center.rect.center) - self.screen_center
+        self.offset = Vector2(center.rect.center) - self.screen_center
         
         for sprite in sorted(self.sprites(), key=lambda s: s.rect.centery):
                         
             self.display_surface.blit(
                 sprite.image,
-                sprite.rect.topleft - offset
+                sprite.rect.topleft - self.offset
             )
     

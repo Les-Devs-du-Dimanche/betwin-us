@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from enum import Enum
 from typing import Literal
 
@@ -14,6 +16,8 @@ class Entity(Sprite):
     animation_name: str
     
     HITBOX: tuple[int, int]
+    
+    DESTINATION_RADIUS = TILE_SIZE * 0.8
     
     class Speed:
         WALK = 3
@@ -38,13 +42,35 @@ class Entity(Sprite):
         self.status = self.Status.IDLE
         self.facing = Facing.SOUTH
         
+        self.destination_target = None
+        
     def update(self, dt: int):
         self._input()
+        self._update_destination()
         self._move(dt)
         self._animate(dt)
         
     def _input(self):
         pass
+    
+    def _go_towards(self, target: 'Entity' | Vector2 | tuple[int, int]):
+        if isinstance(target, Entity):
+            self.destination_target = Vector2(target.rect.center)
+        else:
+            self.destination_target = Vector2(target)
+                
+        self.direction = self.destination_target - Vector2(self.rect.center)
+        if self.direction.length() != 0:
+            self.direction = self.direction.normalize()
+    
+    def _update_destination(self):
+        if self.destination_target:
+            distance = (Vector2(self.rect.center) - self.destination_target).length()
+            # print()
+            if distance <= self.DESTINATION_RADIUS:
+                self.destination_target = None
+            else:
+                self._go_towards(self.destination_target)
     
     def _move(self, dt: int):
         self.hitbox.x += self.direction.x * dt * DT_SPEED * self.speed
@@ -73,4 +99,3 @@ class Entity(Sprite):
     def _animate(self, dt: int):
         self.animation.update(dt)
         self.image = self.animation.get_surface()
-

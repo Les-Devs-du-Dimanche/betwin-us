@@ -1,6 +1,6 @@
 from typing import Literal, Protocol, TypedDict, Any
 
-from pygame import Rect, Surface
+from pygame import Rect, Surface, Vector2
 
 from .consts import Facing
 
@@ -9,6 +9,8 @@ if 0: from .entity.entity import Entity
 
 class HasRect(Protocol):
     rect: Rect
+    
+Coords = HasRect | Vector2
     
 class AnimationDict(TypedDict):
     speed: float

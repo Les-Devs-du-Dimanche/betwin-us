@@ -9,6 +9,7 @@ from ..functions import path
 from ..group import Groups
 from ..hinting import LevelData, ObjectGroup, TileLayer
 from .tile import Tile
+from ..entity.dict import entity_dict
 
 
 class Level:
@@ -25,6 +26,9 @@ class Level:
         return Level(data)
     
     def __init__(self, data: LevelData):
+        
+        self.width  = TILE_SIZE * int(data['width'])
+        self.height = TILE_SIZE * int(data['height'])
         
         # tileset            
         tileset_id = ''.join(
@@ -82,4 +86,8 @@ class Level:
             for obj in layer_data['objects']:
                 if obj['type'] == 'worldspawn':
                     self.worldspawn = Vector2(obj['x'], obj['y'])
+        elif layer_data['name'] == 'entities':
+            for obj in layer_data['objects']:
+                if obj['type'] in entity_dict:
+                    entity_dict[obj['type']](Vector2(obj['x'], obj['y']))
         
