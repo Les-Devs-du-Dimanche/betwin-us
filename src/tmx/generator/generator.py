@@ -39,4 +39,13 @@ class Generator :
                 self.gen_room(_room, room_to_generate)
                 
         def transform_room_grid_to_json(self) :
-            pass
+            data = zeros((self.rg_dim * self.room_dim, self.rg_dim * self.room_dim))
+            
+            for room in Room.rooms :
+                for y, row in enumerate(room.data):
+                    for x, tile_id in enumerate(row):
+                        data[y + room.pos[1]][x+room.x] = tile_id
+                    
+                for y, row in enumerate(room.data) :
+                    for x, tile_id in enumerate(row):
+                        data[y + room.pos[1][x+room.x]] = tile_id
