@@ -8,9 +8,11 @@ class Room:
     
     LEVEL_DIM = 8, 8
     grid = zeros(LEVEL_DIM)
+    rooms = []
     
     def __init__(self, pos: tuple[int, int], door_state: DoorStateDict):
         self.pos = pos
+        self.rooms.append(self)
         
     @classmethod
     def get_adjacent_rooms(cls, pos: tuple[int, int]):
