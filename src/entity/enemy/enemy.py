@@ -12,8 +12,7 @@ class Enemy(Entity):
     ATTACK_RADUIS = TILE_SIZE * 1
     
     class Speed:
-        WALK = 2
-        RUN = 5
+        WALK = TILE_SIZE * 1.8 # 1.8 tiles/s
         
     def __init__(self, pos: Vector2):
         super().__init__(pos)

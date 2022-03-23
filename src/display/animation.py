@@ -1,7 +1,7 @@
 from pygame import Surface
 from pygame.locals import SRCALPHA
 
-from ..consts import DT_SPEED, TILE_SIZE
+from ..consts import TILE_SIZE
 from ..hinting import AnimationDict, AnimationFrames, AnimationTarget
 
 
@@ -37,7 +37,7 @@ class Animation:
     def update(self, dt: int):
         self.current_key = self.target.facing.name.lower() + '_' + self.target.status.name.lower()
         
-        self.frame_idx += self.speed * dt * DT_SPEED
+        self.frame_idx += self.speed * dt
         self.frame_idx %= len(self.frames[self.current_key])
         
     def set_target(self, target: AnimationTarget):

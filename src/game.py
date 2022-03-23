@@ -3,7 +3,7 @@ import sys
 import pygame
 
 from .entity.pathfinder import PathFinder
-from .consts import DISPLAY_SIZE, FPS
+from .consts import DISPLAY_SIZE, DT_SPEED, FPS
 from .display.assets import Assets
 from .entity.player import Player
 from .group import Groups
@@ -15,8 +15,6 @@ from .sound import Sound
 from .time import Time
 from .translate import Translate
 from .tmx.level import Level
-
-from .tmx.tile import Tile
 
 
 class Game:
@@ -37,22 +35,18 @@ class Game:
         Translate.load(Settings['lang'])
         Keybinds.load()
         Groups.init()
-        
+                
         self.menu = Menu(self.quit)
         
         self.level = Level.load('cinematics/forest.json')
         self.player = Player(self.level.worldspawn)
+        if self.level.cinematic:
+            self.camera_target = self.level.cinematic.camera
+            self.player.movements_locked = True
+        else:
+            self.camera_target = self.player
         
         PathFinder.start(self.level)
-        
-        # NOTE : DEBUG square at cursor 1/2
-        # s = pygame.Surface((64, 64), pygame.SRCALPHA)
-        # pygame.draw.rect(
-        #     s, (255, 0, 0),
-        #     (0, 0, 64, 64),
-        #     3
-        # )
-        # self.select = Tile([Groups.visible], s)
     
     def run(self):
         while True:
@@ -66,6 +60,12 @@ class Game:
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
                         self.menu.escape()
+                        
+                    elif event.key == pygame.K_SPACE:
+                        if self.level.cinematic:
+                            self.level.cinematic = None
+                            self.camera_target = self.player
+                            self.player.movements_locked = False
                     # else:
                     #     print(event.key)
                 
@@ -81,33 +81,54 @@ class Game:
                 elif event.type == pygame.QUIT:
                     self.quit()
             
-            # NOTE : DEBUG square at cursor 2/2
-            # mouse_pos = pygame.Vector2(pygame.mouse.get_pos()) + Groups.visible.offset
-            # self.select.rect.center = mouse_pos
-            
             self.update()
             self.render()
                         
             self.clock.tick(FPS)
             
     def update(self):
-        dt = self.clock.get_time()
+        dt = self.clock.get_time() * DT_SPEED
         
         if not Time.paused:
+            if self.level.cinematic:
+                if self.level.cinematic.done:
+                    self.camera_target = self.player
+                    self.level.cinematic = None
+                    self.player.movements_locked = False
+                else:
+                    self.level.cinematic.update(dt)
+                    
             Groups.to_update.update(dt)
             PathFinder.update()
         else:
             self.menu.update()
         
-    def render(self):
-        # NOTE: tmp
-        # self.screen.fill((108, 145, 97))
-        
-        Groups.background.draw(self.player)
-        Groups.visible.draw(self.player)
+    def render(self):        
+        Groups.background.draw(self.camera_target)
+        Groups.visible.draw(self.camera_target)
         
         if Time.paused:
             self.menu.draw()
+        
+        try:
+            offset = pygame.Vector2(self.level.cinematic.camera.rect.center) - Groups.visible.screen_center
+            pygame.draw.line(
+                self.screen,
+                (255, 0, 0),
+                pygame.Vector2(self.level.cinematic.camera.rect.center) - offset,
+                self.level.cinematic.camera.target - offset,
+                3
+            )
+            
+            pygame.draw.line(
+                self.screen,
+                (0, 0, 255),
+                pygame.Vector2(self.level.cinematic.camera.rect.center) - offset,
+                pygame.Vector2(self.level.cinematic.camera.rect.center) + self.level.cinematic.camera.direction * 50 - offset,
+                5
+            )
+        except:
+            pass
         
         pygame.display.flip()
                     

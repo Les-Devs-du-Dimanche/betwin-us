@@ -7,9 +7,10 @@ from ..consts import TILE_SIZE
 from ..display.assets import Assets
 from ..functions import path
 from ..group import Groups
-from ..hinting import LevelData, ObjectGroup, TileLayer
+from ..hinting import LevelData, ObjectGroup, TileLayer, Object
 from .tile import Tile
 from ..entity.dict import entity_dict
+from .cinematic.cinematic import Cinematic
 
 
 class Level:
@@ -26,6 +27,8 @@ class Level:
         return Level(data)
     
     def __init__(self, data: LevelData):
+        
+        self.cinematic = None
         
         self.width  = TILE_SIZE * int(data['width'])
         self.height = TILE_SIZE * int(data['height'])
@@ -86,8 +89,28 @@ class Level:
             for obj in layer_data['objects']:
                 if obj['type'] == 'worldspawn':
                     self.worldspawn = Vector2(obj['x'], obj['y'])
+                    
         elif layer_data['name'] == 'entities':
             for obj in layer_data['objects']:
                 if obj['type'] in entity_dict:
                     entity_dict[obj['type']](Vector2(obj['x'], obj['y']))
+                    
+        elif layer_data['name'] == 'cinematic':
+            objs = [self.clean_object_properties(obj) for obj in layer_data['objects']]
+            self.cinematic = Cinematic(objs)
+            
+    def clean_object_properties(self, obj: Object) -> Object:
+        if 'properties' in obj:
+            properties = {}
+            
+            for p in obj['properties']:
+                
+                type = p["type"]
+                if type == 'string':
+                    type = 'str'
+                
+                properties[p['name']] = eval(f'{type}("{p["value"]}")')
+                
+            obj['properties'] = properties
         
+        return obj

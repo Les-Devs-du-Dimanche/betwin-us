@@ -7,7 +7,7 @@ from ...functions import reverce_facing
 
 class Generator :
     
-    def __init__(self) -> None: 
+    def __init__(self): 
         self.rg_dim = 8
         self.room_dim = int
         self.room_grid = zeros((self.rg_dim, self.rg_dim))
@@ -16,7 +16,7 @@ class Generator :
     def gen_entry_room(self) :
         pass 
     
-    def gen_room(self, room : Room, room_to_generate : int):
+    def gen_room(self, room: Room, room_to_generate: int):
         if room_to_generate == 0 : return
         
         for door in room.doors() :
@@ -38,14 +38,14 @@ class Generator :
                 self.room_grid[door.destination[0]][door.destination[1]] = _room
                 self.gen_room(_room, room_to_generate)
                 
-        def transform_room_grid_to_json(self) :
-            data = zeros((self.rg_dim * self.room_dim, self.rg_dim * self.room_dim))
-            
-            for room in Room.rooms :
-                for y, row in enumerate(room.data):
-                    for x, tile_id in enumerate(row):
-                        data[y + room.pos[1]][x+room.x] = tile_id
-                    
-                for y, row in enumerate(room.data) :
-                    for x, tile_id in enumerate(row):
-                        data[y + room.pos[1][x+room.x]] = tile_id
+    def transform_room_grid_to_json(self) :
+        data = zeros((self.rg_dim * self.room_dim, self.rg_dim * self.room_dim))
+        
+        for room in Room.rooms :
+            for y, row in enumerate(room.data):
+                for x, tile_id in enumerate(row):
+                    data[y + room.pos[1]][x+room.x] = tile_id
+                
+            for y, row in enumerate(room.data) :
+                for x, tile_id in enumerate(row):
+                    data[y + room.pos[1][x+room.x]] = tile_id

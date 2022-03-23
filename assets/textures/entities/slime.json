@@ -1,5 +1,5 @@
 {
-    "speed": 0.15,
+    "speed": 5,
     "animations": {
         "south_idle": [0, 4],
         "south_walking": [1, 8],

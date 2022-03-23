@@ -29,11 +29,8 @@ class DoorStateDict(TypedDict):
 # Tiled json objects
 class Property(TypedDict):
 
-    # presents but not used :
-    # 
-    # type: type
-
     name: str
+    type: type
     value: Any
 
 class TileLayer(TypedDict):
@@ -72,6 +69,8 @@ class Object(TypedDict):
     y: int
     width: int
     height: int
+    
+    properties: list[Property]
 
 class ObjectGroup(TypedDict):
     
