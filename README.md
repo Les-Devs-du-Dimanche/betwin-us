@@ -1,15 +1,24 @@
 # BeTwin Us
 
-TODO: desc
+Our game for PyWeek #33, probably too ambitious for the time we have but nevermind.
+
+TODO: resume intro
+
+---
 
 ## Controls
 
 All your keybinds are customizables by pressing ESCAPE -> Settings -> Keybinds 
-By default, you can move with Z Q S D. 
+By default, you can move with Z Q S D.
+Intro can be skipped with SPACE
 
 ## Points of Interest
 
-TODO
+- A weird pathfinding on entities
+- Randomly generated levels
+- A beautiful intro
+
+---
 
 ## Dependencies
 - pygame V2.1.2

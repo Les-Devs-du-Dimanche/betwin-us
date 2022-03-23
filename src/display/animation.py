@@ -44,7 +44,6 @@ class Animation:
         self.target = target
 
     def get_surface(self) -> Surface:
-        # print(self.current_key)
         return self.frames[self.current_key][int(self.frame_idx)]
     
     def copy(self) -> 'Animation':

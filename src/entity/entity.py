@@ -66,7 +66,7 @@ class Entity(Sprite):
     def _update_destination(self):
         if self.destination_target:
             distance = (Vector2(self.rect.center) - self.destination_target).length()
-            # print()
+
             if distance <= self.DESTINATION_RADIUS:
                 self.destination_target = None
             else:
