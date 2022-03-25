@@ -3,7 +3,7 @@
  "infinite":false,
  "layers":[
         {
-         "data":[37, 37, 37, 37, 37, 37, 37, 37, 37, 37, 37, 37, 37, 37, 37, 37, 37, 37, 37, 37, 37, 37, 37, 37, 37, 37, 37, 37, 37, 37, 37, 37, 37, 37, 37, 37, 37, 37, 37, 37, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 37, 37, 37, 37, 37, 37, 37, 37, 37, 37, 37, 37, 37, 37, 37, 37, 37, 37, 37, 37, 37, 37, 37, 37, 37, 37, 37, 37, 37, 37, 37, 37, 37, 37, 37, 37, 37, 37, 37, 37],
+         "data":[37, 37, 37, 37, 12, 12, 37, 37, 37, 37, 37, 37, 37, 37, 12, 12, 37, 37, 37, 37, 37, 37, 37, 37, 12, 12, 37, 37, 37, 37, 37, 37, 37, 37, 12, 12, 37, 37, 37, 37, 12, 12, 12, 12, 12, 12, 37, 37, 37, 37, 12, 12, 12, 12, 12, 12, 37, 37, 37, 37, 37, 37, 37, 37, 12, 12, 37, 37, 37, 37, 37, 37, 37, 37, 12, 12, 37, 37, 37, 37, 37, 37, 37, 37, 12, 12, 37, 37, 37, 37, 37, 37, 37, 37, 12, 12, 37, 37, 37, 37],
          "height":10,
          "id":1,
          "name":"floor",
@@ -28,12 +28,36 @@
         }, 
         {
          "draworder":"topdown",
-         "id":4,
+         "id":3,
          "name":"data",
          "objects":[
                 {
                  "height":0,
                  "id":1,
+                 "name":"north_door",
+                 "point":true,
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":320,
+                 "y":64
+                }, 
+                {
+                 "height":0,
+                 "id":2,
+                 "name":"south_door",
+                 "point":true,
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":320,
+                 "y":576
+                }, 
+                {
+                 "height":0,
+                 "id":3,
                  "name":"west_door",
                  "point":true,
                  "rotation":0,
@@ -42,18 +66,6 @@
                  "width":0,
                  "x":64,
                  "y":320
-                }, 
-                {
-                 "height":0,
-                 "id":2,
-                 "name":"east_door",
-                 "point":true,
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":0,
-                 "x":576,
-                 "y":320
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -61,8 +73,8 @@
          "x":0,
          "y":0
         }],
- "nextlayerid":5,
- "nextobjectid":3,
+ "nextlayerid":4,
+ "nextobjectid":4,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.7.0",
@@ -71,10 +83,6 @@
         {
          "firstgid":1,
          "source":"..\/tilesets\/floor.tsx"
-        }, 
-        {
-         "firstgid":280,
-         "source":"..\/tilesets\/relief.tsx"
         }],
  "tilewidth":64,
  "type":"map",
