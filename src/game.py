@@ -1,3 +1,4 @@
+from ast import PyCF_ALLOW_TOP_LEVEL_AWAIT
 import sys
 
 import pygame
@@ -16,15 +17,20 @@ from .time import Time
 from .translate import Translate
 from .tmx.level import Level
 from .discord import Discord
+from .functions import path
 
 
 class Game:
     
     def __init__(self):
-        pygame.init()
+        pygame.init()        
+       
+        pygame.display.set_caption('Betwin Us')
+        pygame.display.set_icon(pygame.image.load(path("assets/pictures/logo32.png")))
+
         self.screen = pygame.display.set_mode(DISPLAY_SIZE)
         self.clock = pygame.time.Clock()
-        
+
         Assets.load()
         Settings.load()
         Sound.init(
@@ -52,7 +58,7 @@ class Game:
         # NOTE: Not enough fast
         # PathFinder.start(self.level)
         
-        self.font = Assets.get('font.menu', size=24)
+        self.font = Assets.get('font.menu', size=24)        
     
     def run(self):
         while True:
@@ -94,7 +100,7 @@ class Game:
             self.render()
                         
             self.clock.tick(FPS)
-    
+
     def attack_logic(self):
         # player attacks
         for attack in Groups.player_attacks:
@@ -119,6 +125,7 @@ class Game:
                 self.player.get_damages(attack)
     
     def end_cinematic(self):
+        
         self.camera_target = self.player
         self.level.cinematic = None
         
@@ -155,6 +162,12 @@ class Game:
             surface,
             surface.get_rect(topleft=(10, 10))
         )
+        
+        if not Time.paused:
+            if self.level.cinematic:
+                if not self.level.cinematic.done:
+                    self.skip_label = self.font.render(Translate['intro.skip'], 1, (255,255,255))
+                    self.screen.blit(self.skip_label, (550,600))
                 
         pygame.display.flip()
                     

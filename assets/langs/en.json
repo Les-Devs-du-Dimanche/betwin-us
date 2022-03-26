@@ -80,5 +80,7 @@
 
     "key.print_screen": "Print screen",
     "key.scroll_lock": "Scroll lock",
-    "key.break": "Break"
+    "key.break": "Break",
+
+    "intro.skip": "Skip : [SPACE]"
 }
