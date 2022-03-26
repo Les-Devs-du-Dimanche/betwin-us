@@ -83,6 +83,9 @@ class Game:
                     
                 elif event.type == pygame.QUIT:
                     self.quit()
+
+                elif event.type == self.player.switch:
+                    self.player.switch_mode()                           
             
             self.update()
             self.render()
