@@ -2,6 +2,8 @@
     "entity.player": "textures/entities/player.json",
     "entity.slime": "textures/entities/slime.json",
     "item.sword": "textures/items/sword.json",
+    "entity.firesoul" : "textures/entities/firesoul.json",
+    "entity.cursed_chest": "textures/entities/cursed_chest.json",
 
     "font.menu": "fonts/menu.ttf",
 

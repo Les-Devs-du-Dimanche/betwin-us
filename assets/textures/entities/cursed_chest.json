@@ -1,0 +1,10 @@
+{
+    "speed": 5,
+    "animations": {
+        "south_idle": [0, 4],
+        "south_walking": [1, 4],
+        "south_attacking": [2, 4],
+        "south_damaged": [4, 3],
+        "south_death": [4, 6]
+    }
+}
