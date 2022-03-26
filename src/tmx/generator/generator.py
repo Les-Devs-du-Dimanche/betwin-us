@@ -3,9 +3,8 @@ from random import randint, choice
 from numpy import zeros
 
 from .room import Room
-from ...consts import DoorState, Facing
-from ...functions import reverce_facing
-from ...hinting import LevelData
+from ...consts import DoorState, Facing, TILE_SIZE
+from ...hinting import LevelData, ObjectGroup, TileLayer
 
 
 class Generator:
@@ -15,7 +14,7 @@ class Generator:
     
     @classmethod
     def generate(cls) -> LevelData:
-        cls.room_grid = zeros((cls.ROOM_GRID_SIZE, cls.ROOM_GRID_SIZE))
+        cls.room_grid = zeros((cls.ROOM_GRID_SIZE, cls.ROOM_GRID_SIZE)).tolist()
         cls.dead_ends = []
         
         Room.rooms = []
@@ -23,7 +22,25 @@ class Generator:
         cls.gen_room(cls.entry_room)
         cls.gen_exit_room()
         
-        return cls.get_json()
+        dict_level = cls.get_json()
+        
+        # set worldspawn
+        for layer in dict_level['layers']:
+            if layer['name'] == 'data':
+                layer['objects'].append({
+                    "height": 0,
+                    # "id": 1,
+                    "name": "Worldspawn",
+                    "point": True,
+                    # "rotation": 0,
+                    "type": "worldspawn",
+                    # "visible": True,
+                    "width": 0,
+                    "x": (cls.entry_room.pos[0] + 0.5) * cls.ROOM_SIZE * TILE_SIZE,
+                    "y": (cls.entry_room.pos[1] + 0.5) * cls.ROOM_SIZE * TILE_SIZE
+                })
+                
+        return dict_level
         
     @classmethod
     def gen_entry_room(cls):
@@ -54,27 +71,27 @@ class Generator:
     
     @classmethod
     def gen_exit_room(cls):
-        cls.exit_room = choice(cls.dead_ends)
+        if cls.dead_ends:
+            cls.exit_room = choice(cls.dead_ends)
+        else:
+            rooms = Room.rooms
+            rooms.remove(cls.entry_room)
+            cls.exit_room = choice(rooms)
     
     @classmethod
     def gen_room(cls, room: Room):
-        for door in room.doors:            
-            adjacent_rooms = Room.get_adjacent_room(door.destination)
-            facing_posibilities = {}
-            for facing, posibility in adjacent_rooms.items() :
-                if f := reverce_facing[door.facing] == facing :
-                    facing_posibilities[f] = DoorState.FORCED
-                    continue
-                
-                if posibility :
-                    facing_posibilities[facing] = DoorState.ALLOWED
-                else :
-                    facing_posibilities[facing] = DoorState.FORBIDDEN
+        for door in room.doors:
+            
+            if cls.room_grid[door.destination[1]][door.destination[0]] == 0:
+            
+                facing_posibilities = Room.get_adjacent_rooms(door.destination, cls.room_grid)
                 
                 _room = Room(door.destination, facing_posibilities)
-                if _room.nb_door == 1 :
+                if len(_room.doors) == 1:
                     cls.dead_ends.append(_room)
-                cls.room_grid[door.destination[0]][door.destination[1]] = _room
+                
+                cls.room_grid[door.destination[1]][door.destination[0]] = _room
+                
                 cls.gen_room(_room)
     
     @classmethod   
@@ -91,61 +108,78 @@ class Generator:
                     'source':'..\/tilesets\/relief.tsx',
                 },
             ],
+            "height": 80,
+            "width": 80
         }
         
         layers = [
             {
-                'data': zeros((cls.ROOM_GRID_SIZE * cls.ROOM_SIZE, cls.ROOM_GRID_SIZE * cls.ROOM_SIZE)),
-                'height':48,
-                'name':'floor',
-                'type':'tilelayer',
-                'width':48,
-                'x':0,
-                'y':0
+                'data': zeros((cls.ROOM_GRID_SIZE * cls.ROOM_SIZE, cls.ROOM_GRID_SIZE * cls.ROOM_SIZE)).tolist(),
+                'height': 80,
+                'name': 'floor',
+                'type': 'tilelayer',
+                'width': 80,
+                'x': 0,
+                'y': 0,
             }, 
             {
-                'data': zeros((cls.ROOM_GRID_SIZE * cls.ROOM_SIZE, cls.ROOM_GRID_SIZE * cls.ROOM_SIZE)),
-                'height':48,
-                'name':'relief',
-                'properties': [],
-                'type':'tilelayer',
-                'width':48,
-                'x':0,
-                'y':0
+                'data': zeros((cls.ROOM_GRID_SIZE * cls.ROOM_SIZE, cls.ROOM_GRID_SIZE * cls.ROOM_SIZE)).tolist(),
+                'height': 80,
+                'name': 'relief',
+                'type': 'tilelayer',
+                'width': 80,
+                'x': 0,
+                'y': 0,
             },
             {
-                'name':'entities',
+                # 'id': 3,
+                'name': 'entities',
                 'objects': [],
-                'type':'objectgroup',
-                'x':0,
-                'y':0
+                'type': 'objectgroup',
+                'x': 0,
+                'y': 0,
             }, 
             {
-                'id':4,
-                'name':'data',
+                # 'id': 4,
+                'name': 'data',
                 'objects': [],
-                'type':'objectgroup',
-                'x':0,
-                'y':0
-            }
+                'type': 'objectgroup',
+                'x': 0,
+                'y': 0,
+            },
         ]
+        
         for room in Room.rooms:
+            _layers = {}
+            
             for layer in room.layers:
-                for i, _layer in enumerate(layers):
-                    if layer['name'] == _layer['name']:
-                        layer_data = cls.past_room_on_layer(layer, _layer)
-                        layers[i]['data'] = layer_data
-                        break
-                 
+                _layers[layer['name']] = layer
+                
+            for i, layer in enumerate(layers):
+                if layer['name'] in _layers:
+                    layers[i] = cls.past_layer(layer, _layers[layer['name']], room.pos)
+        
+        for layer in layers:
+            if layer['type'] == 'tilelayer':
+                data = []
+                for row in layer['data']:
+                    data += row
+                layer['data'] = data
+        
         json['layers'] = layers
+        return json
         
     @classmethod
-    def past_room_on_layer(cls, room: Room, layer: list[list[int]]) -> list[list[int]]:
-        for room in Room.rooms :
-            for y, row in enumerate(room.data):
+    def past_layer(cls, _on: TileLayer | ObjectGroup, _past: TileLayer | ObjectGroup, pos: tuple[int, int]) -> list[list[int]]:
+        if _on['type'] == 'tilelayer':
+            for y, row in enumerate(_past['data']):
                 for x, tile_id in enumerate(row):
-                    layer[y + room.pos[1]][x + room.x] = tile_id
-                
-            for y, row in enumerate(room.data) :
-                for x, tile_id in enumerate(row):
-                    layer[y + room.pos[1][x + room.x]] = tile_id
+                    _y = y + pos[1] * cls.ROOM_SIZE
+                    _x = x + pos[0] * cls.ROOM_SIZE
+                    _on['data'][_y][_x] = tile_id
+                    
+        else:
+            for obj in _past['objects']:
+                if 'door' not in obj['name']:
+                    _on['objects'].append(obj)
+        return _on

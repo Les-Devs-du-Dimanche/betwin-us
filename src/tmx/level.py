@@ -11,13 +11,15 @@ from ..hinting import LevelData, ObjectGroup, TileLayer, Object
 from .tile import Tile
 from ..entity.dict import entity_dict
 from .cinematic.cinematic import Cinematic
+from .generator.generator import Generator
 
 
 class Level:
     
     @classmethod
     def generate(cls) -> 'Level':
-        raise NotImplementedError() # TODO
+        level_dict = Generator.generate()
+        return Level(level_dict)
     
     @classmethod
     def load(cls, filename: str) -> 'Level':

@@ -13,8 +13,9 @@ from .keybinds import Keybinds
 from .settings import Settings
 from .sound import Sound
 from .time import Time
-from .translate import Translate
+from .tmx.generator.room import Room
 from .tmx.level import Level
+from .translate import Translate
 
 
 class Game:
@@ -38,7 +39,10 @@ class Game:
                 
         self.menu = Menu(self.quit)
         
-        self.level = Level.load('cinematics/forest.json')
+        # self.level = Level.load('cinematics/forest.json')
+        Room.load()
+        self.level = Level.generate()
+        
         self.player = Player(self.level.worldspawn)
         if self.level.cinematic:
             self.camera_target = self.level.cinematic.camera
@@ -144,11 +148,6 @@ class Game:
         
         # Show fps
         # surface = self.font.render(str(round(self.clock.get_fps())), True, (255, 255, 255))
-        surface = self.font.render(str(self.player.status), True, (255, 255, 255))
-        self.screen.blit(
-            surface,
-            surface.get_rect(topleft=(10, 10))
-        )
                 
         pygame.display.flip()
                     

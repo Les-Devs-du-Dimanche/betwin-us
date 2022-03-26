@@ -34,7 +34,7 @@
                 {
                  "height":0,
                  "id":1,
-                 "name":"west_door ",
+                 "name":"west_door",
                  "point":true,
                  "rotation":0,
                  "type":"",
@@ -77,7 +77,7 @@
  "nextobjectid":4,
  "orientation":"orthogonal",
  "renderorder":"right-down",
- "tiledversion":"1.7.0",
+ "tiledversion":"1.7.2",
  "tileheight":64,
  "tilesets":[
         {

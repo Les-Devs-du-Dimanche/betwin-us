@@ -19,10 +19,3 @@ def get_player() -> 'Player':
         # isinstance(sprite, Player)
         if type(sprite).__name__ == 'Player':
             return sprite
-
-reverce_facing = {
-    Facing.NORTH: Facing.SOUTH,
-    Facing.SOUTH: Facing.NORTH,
-    Facing.EAST: Facing.WEST,
-    Facing.WEST: Facing.EAST,
-}
