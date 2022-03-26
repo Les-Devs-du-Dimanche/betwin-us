@@ -1,0 +1,10 @@
+{
+    "speed": 5,
+    "animations": {
+        "south": [2, 1],
+        "west": [3, 1],
+        "east": [1, 1],
+        "north": [0, 1]
+
+    }
+}

@@ -13,3 +13,6 @@ class Groups:
         
         cls.obstacles = Group()
         cls.entities  = Group()
+        
+        cls.player_attacks = Group()
+        cls.enemies_attacks = Group()

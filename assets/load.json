@@ -1,6 +1,7 @@
 {
     "entity.player": "textures/entities/player.json",
     "entity.slime": "textures/entities/slime.json",
+    "item.sword": "textures/items/sword.json",
 
     "font.menu": "fonts/menu.ttf",
 

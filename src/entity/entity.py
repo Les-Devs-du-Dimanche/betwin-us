@@ -10,10 +10,15 @@ from ..consts import TILE_SIZE, Facing, CENTER_RECT
 from ..display.assets import Assets
 from ..group import Groups
 
+if 0:
+    from .enemy import Enemy
+    from ..item.item import Item
+
 
 class Entity(Sprite):
     
     animation_name: str
+    health: int
     
     HITBOX: tuple[int, int]
     
@@ -43,12 +48,27 @@ class Entity(Sprite):
         self.facing = Facing.SOUTH
         
         self.destination_target = None
+        self.movements_locked = False
+        
+    def get_damages(self, attack: 'Item' | 'Enemy'):
+        if hasattr(attack, 'chase_enabled'): # isinstance(attack, Enemy)
+            pass
+        else: # isinstance(attack, Item)
+            self.health -= attack.damages
         
     def update(self, dt: int):
-        self._input()
+        self.__input()
         self._update_destination()
         self._move(dt)
         self._animate(dt)
+        
+        if self.health <= 0:
+            self.kill()
+        
+    def __input(self):
+        if not self.movements_locked:
+            if self.status != self.Status.ATTACKING:
+                self._input()
         
     def _input(self):
         pass

@@ -2,7 +2,7 @@ import sys
 
 import pygame
 
-from .entity.pathfinder import PathFinder
+# from .entity.pathfinder import PathFinder
 from .consts import DISPLAY_SIZE, DT_SPEED, FPS
 from .display.assets import Assets
 from .entity.player import Player
@@ -46,7 +46,10 @@ class Game:
         else:
             self.camera_target = self.player
         
-        PathFinder.start(self.level)
+        # NOTE: Not enough fast
+        # PathFinder.start(self.level)
+        
+        self.font = Assets.get('font.menu', size=24)
     
     def run(self):
         while True:
@@ -54,6 +57,7 @@ class Game:
             Button.click_event = False
             KeyButton.key_event = 0
             Slider.click_event = False
+            self.player.click_event = None
             
             for event in pygame.event.get():
                 
@@ -63,9 +67,7 @@ class Game:
                         
                     elif event.key == pygame.K_SPACE:
                         if self.level.cinematic:
-                            self.level.cinematic = None
-                            self.camera_target = self.player
-                            self.player.movements_locked = False
+                            self.end_cinematic()
                     # else:
                     #     print(event.key)
                 
@@ -77,6 +79,7 @@ class Game:
                     
                 elif event.type == pygame.MOUSEBUTTONDOWN:
                     Slider.click_event = True
+                    self.player.click_event = event
                     
                 elif event.type == pygame.QUIT:
                     self.quit()
@@ -85,6 +88,36 @@ class Game:
             self.render()
                         
             self.clock.tick(FPS)
+    
+    def attack_logic(self):
+        # player attacks
+        for attack in Groups.player_attacks:
+            attack_mask = pygame.mask.from_surface(attack.image)
+            
+            sprites = pygame.sprite.spritecollide(attack, Groups.entities, False)
+            for sprite in sprites:
+                if sprite == self.player: continue
+                    
+                sprite_mask = pygame.mask.from_surface(sprite.image)
+                offset = sprite.pos - pygame.Vector2(attack.rect.center)
+                if attack_mask.overlap(sprite_mask, offset):
+                    sprite.get_damages(attack)
+                    
+        # enemies attacks
+        for attack in Groups.enemies_attacks:
+            attack_mask = pygame.mask.from_surface(attack.image)
+            
+            player_mask = pygame.mask.from_surface(self.player.image)
+            offset = self.player.pos - pygame.Vector2(attack.rect.center)
+            if attack_mask.overlap(player_mask, offset):
+                self.player.get_damages(attack)
+    
+    def end_cinematic(self):
+        self.camera_target = self.player
+        self.level.cinematic = None
+        
+        for entity in Groups.entities.sprites():
+            entity.movements_locked = False
             
     def update(self):
         dt = self.clock.get_time() * DT_SPEED
@@ -92,14 +125,13 @@ class Game:
         if not Time.paused:
             if self.level.cinematic:
                 if self.level.cinematic.done:
-                    self.camera_target = self.player
-                    self.level.cinematic = None
-                    self.player.movements_locked = False
+                    self.end_cinematic()
                 else:
                     self.level.cinematic.update(dt)
                     
             Groups.to_update.update(dt)
-            PathFinder.update()
+            self.attack_logic()
+            # PathFinder.update()
         else:
             self.menu.update()
         
@@ -110,26 +142,14 @@ class Game:
         if Time.paused:
             self.menu.draw()
         
-        try:
-            offset = pygame.Vector2(self.level.cinematic.camera.rect.center) - Groups.visible.screen_center
-            pygame.draw.line(
-                self.screen,
-                (255, 0, 0),
-                pygame.Vector2(self.level.cinematic.camera.rect.center) - offset,
-                self.level.cinematic.camera.target - offset,
-                3
-            )
-            
-            pygame.draw.line(
-                self.screen,
-                (0, 0, 255),
-                pygame.Vector2(self.level.cinematic.camera.rect.center) - offset,
-                pygame.Vector2(self.level.cinematic.camera.rect.center) + self.level.cinematic.camera.direction * 50 - offset,
-                5
-            )
-        except:
-            pass
-        
+        # Show fps
+        # surface = self.font.render(str(round(self.clock.get_fps())), True, (255, 255, 255))
+        surface = self.font.render(str(self.player.status), True, (255, 255, 255))
+        self.screen.blit(
+            surface,
+            surface.get_rect(topleft=(10, 10))
+        )
+                
         pygame.display.flip()
                     
     def quit(self):

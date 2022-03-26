@@ -35,7 +35,10 @@ class Animation:
                 
                     
     def update(self, dt: int):
-        self.current_key = self.target.facing.name.lower() + '_' + self.target.status.name.lower()
+        if hasattr(self.target, 'status'):
+            self.current_key = self.target.facing.name.lower() + '_' + self.target.status.name.lower()
+        else:
+            self.current_key = self.target.facing.name.lower()
         
         self.frame_idx += self.speed * dt
         self.frame_idx %= len(self.frames[self.current_key])
