@@ -1,7 +1,10 @@
 from os import set_inheritable
 from pygame import Vector2
+import pygame
 from pygame.key import get_pressed as get_key_pressed
 from pygame.mouse import get_pressed as get_mouse_pressed
+from random import randint as random_integer
+
 
 from ..keybinds import Keybinds
 from .entity import Entity
@@ -14,14 +17,20 @@ class Player(Entity):
     animation_name = 'entity.player'
     health = 100
     
+
     HITBOX = -20, -48
-    
+        
     def __init__(self, pos: Vector2):
         super().__init__(pos)
         
         self.click_event = None
         self.melee_weapon = Sword(self)
+        self.evil = False
+        self.switch = pygame.event.custom_type()
         # self.ranged_weapon = None
+
+        self.appening = random_integer(60,60*3)
+        pygame.time.set_timer(self.switch, self.appening * 1000)
         
     def _input(self):
         # movements
@@ -74,3 +83,13 @@ class Player(Entity):
         if not self.melee_weapon.shown:# and not self.melee_weapon.visible:
             self.status = self.Status.IDLE
     
+    def switch_mode(self) :
+        self.switch = pygame.event.custom_type()
+        if not self.evil  :            
+            self.evil = True
+            self.appening = random_integer(60,60*3)
+            pygame.time.set_timer(self.switch, self.appening * 1000)
+        else :
+            self.evil = False 
+            self.appening = 3000
+            pygame.time.set_timer(self.switch, self.appening)

@@ -4,6 +4,9 @@
     "item.sword": "textures/items/sword.json",
     "entity.firesoul" : "textures/entities/firesoul.json",
     "entity.cursed_chest": "textures/entities/cursed_chest.json",
+    "entity.red_slime": "textures/entities/red_slime.json",
+    "entity.brain": "textures/entities/brain.json", 
+    "entity.eye" : "textures/entities/eye.json",
 
     "font.menu": "fonts/menu.ttf",
 

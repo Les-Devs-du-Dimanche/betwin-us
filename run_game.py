@@ -1,5 +1,7 @@
 from multiprocessing import freeze_support
 
+import ctypes
+
 
 if __name__ == '__main__':
     freeze_support()
@@ -17,6 +19,9 @@ if __name__ == '__main__':
     # hide pygame init message
     import os
     os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
+
+    myappid = 'mycompany.myproduct.subproduct.version'
+    ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
 
     # start game
     from src.game import Game

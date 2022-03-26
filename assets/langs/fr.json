@@ -80,5 +80,7 @@
 
     "key.print_screen": "Impr écran",
     "key.scroll_lock": "Arrêt défil",
-    "key.break": "Pause"
+    "key.break": "Pause",
+
+    "intro.skip": "Passer : [ESPACE]"
 }

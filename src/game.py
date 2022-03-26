@@ -16,15 +16,21 @@ from .time import Time
 from .tmx.generator.room import Room
 from .tmx.level import Level
 from .translate import Translate
+from .discord import Discord
+from .functions import path
 
 
 class Game:
     
     def __init__(self):
-        pygame.init()
+        pygame.init()        
+       
+        pygame.display.set_caption('Betwin Us')
+        pygame.display.set_icon(pygame.image.load(path("assets/pictures/logo32.png")))
+
         self.screen = pygame.display.set_mode(DISPLAY_SIZE)
         self.clock = pygame.time.Clock()
-        
+
         Assets.load()
         Settings.load()
         Sound.init(
@@ -36,7 +42,9 @@ class Game:
         Translate.load(Settings['lang'])
         Keybinds.load()
         Groups.init()
-                
+        Discord.init()
+        Discord.update(details="", state="Climbing the moutain")
+
         self.menu = Menu(self.quit)
         
         # self.level = Level.load('cinematics/forest.json')
@@ -53,7 +61,7 @@ class Game:
         # NOTE: Not enough fast
         # PathFinder.start(self.level)
         
-        self.font = Assets.get('font.menu', size=24)
+        self.font = Assets.get('font.menu', size=24)        
     
     def run(self):
         while True:
@@ -87,12 +95,15 @@ class Game:
                     
                 elif event.type == pygame.QUIT:
                     self.quit()
+
+                elif event.type == self.player.switch:
+                    self.player.switch_mode()                           
             
             self.update()
             self.render()
                         
             self.clock.tick(FPS)
-    
+
     def attack_logic(self):
         # player attacks
         for attack in Groups.player_attacks:
@@ -117,6 +128,7 @@ class Game:
                 self.player.get_damages(attack)
     
     def end_cinematic(self):
+        
         self.camera_target = self.player
         self.level.cinematic = None
         
@@ -148,6 +160,17 @@ class Game:
         
         # Show fps
         # surface = self.font.render(str(round(self.clock.get_fps())), True, (255, 255, 255))
+        surface = self.font.render(str(self.player.status), True, (255, 255, 255))
+        self.screen.blit(
+            surface,
+            surface.get_rect(topleft=(10, 10))
+        )
+        
+        if not Time.paused:
+            if self.level.cinematic:
+                if not self.level.cinematic.done:
+                    self.skip_label = self.font.render(Translate['intro.skip'], 1, (255,255,255))
+                    self.screen.blit(self.skip_label, (550,600))
                 
         pygame.display.flip()
                     

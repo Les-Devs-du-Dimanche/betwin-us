@@ -15,6 +15,22 @@
 
         "north_idle": [6, 1],
         "north_walking": [6, 4],
-        "north_attacking": [7, 4]
+        "north_attacking": [7, 4],
+
+        "evil_south_idle": [8, 1],
+        "evil_south_walking": [8, 4],
+        "evil_south_attacking": [9, 4],
+
+        "evil_west_idle": [10, 1],
+        "evil_west_walking": [10, 4],
+        "evil_west_attacking": [11, 4],
+
+        "evil_east_idle": [12, 1],
+        "evil_east_walking": [13, 4],
+        "evil_east_attacking": [13, 4],
+
+        "evil_north_idle": [14, 1],
+        "evil_north_walking": [14, 4],
+        "evil_north_attacking": [15, 4]
     }
 }
