@@ -15,6 +15,7 @@ from .sound import Sound
 from .time import Time
 from .translate import Translate
 from .tmx.level import Level
+from .discord import Discord
 
 
 class Game:
@@ -35,7 +36,9 @@ class Game:
         Translate.load(Settings['lang'])
         Keybinds.load()
         Groups.init()
-                
+        Discord.init()
+        Discord.update(details="", state="Climbing the moutain")
+
         self.menu = Menu(self.quit)
         
         self.level = Level.load('cinematics/forest.json')

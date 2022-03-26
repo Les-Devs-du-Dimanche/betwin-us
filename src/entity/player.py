@@ -26,7 +26,7 @@ class Player(Entity):
         self.click_event = None
         self.melee_weapon = Sword(self)
         self.evil = False
-        switch = pygame.event.custom_type()
+        self.switch = pygame.event.custom_type()
         # self.ranged_weapon = None
 
         self.appening = random_integer(60,60*3)
